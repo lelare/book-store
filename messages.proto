@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package bookserver;
+
+service Game {
+    rpc connect (ConnectionRequest) returns (PlayerResponse) {}
+    rpc update (stream UpdateRequest) returns (stream UpdateResponse) {}
+    rpc Election (ElectionRequest) returns (ElectionResponse) {}
+    rpc TimeSync (TimeSyncRequest) returns (TimeSyncResponse) {}
+    rpc ListBoard (Empty) returns (BoardState) {}
+    rpc GetPrice(Book) returns (Price) {}
+}
+
+message ConnectionRequest {
+    string id = 1;
+}
+
+message UpdateRequest {
+    string id = 1;
+    string user = 2;
+    string book = 3;
+    string data = 4;
+    double price = 5;
+}
+
+message PlayerResponse {
+    string character = 2;
+    int32 count_of_users = 3;
+}
+
+message UpdateResponse {
+    string character = 2;
+    int32 count_of_users = 3;
+    bool changes = 4;
+    string message = 5;
+}
+
+message ElectionRequest {
+  int32 id = 1;
+}
+
+message ElectionResponse {
+  int32 id = 1;
+  double time = 2;
+}
+
+message TimeSyncRequest {
+  double time = 1;
+}
+
+message TimeSyncResponse {
+  int32 id = 1;
+  double time = 2;
+}
+
+message Empty {}
+
+message BoardState {
+  repeated string board = 1;
+}
+
+message Process {
+  string id = 1;
+}
+
+message CreateProcessesRequest {
+  int32 num_processes = 1;
+}
+
+message CreateProcessesResponse {
+  repeated Process processes = 1;
+}
+
+message DataStoreMessage {
+  string process_id = 1;
+}
+
+message WriteOperationRequest {
+  string book = 1;
+  int32 price = 2;
+}
+
+message WriteOperationResponse {
+  string message = 1;
+}
+
+message Book {
+    string name = 1;
+}
+
+message Price {
+    float amount = 1;
+}
